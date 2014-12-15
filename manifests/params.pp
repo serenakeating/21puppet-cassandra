@@ -99,7 +99,7 @@ class cassandra::params {
     }
 
     $version = $::cassandra_version ? {
-        undef   => '2.0.10',
+        undef   => '2.1.2',
         default => $::cassandra_version,
     }
 
@@ -151,6 +151,16 @@ class cassandra::params {
     $rpc_server_type = $::cassandra_rpc_server_type ? {
         undef   => 'hsha',
         default => $::cassandra_rpc_server_type,
+    }
+
+    $rpc_min_threads = $::cassandra_rpc_min_threads ? {
+        undef   => 0,
+        default => $::cassandra_rpc_min_threads,
+    }
+
+    $rpc_max_threads = $::cassandra_rpc_max_threads ? {
+        undef   => 2048,
+        default => $::cassandra_rpc_max_threads,
     }
 
     $storage_port = $::cassandra_storage_port ? {
@@ -236,7 +246,7 @@ class cassandra::params {
     }
 
     $start_native_transport = $::cassandra_start_native_transport ? {
-        undef   => 'false',
+        undef   => 'true',
         default => $::cassandra_start_native_transport,
     }
 

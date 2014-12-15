@@ -25,6 +25,8 @@ class cassandra(
     $rpc_address                = $cassandra::params::rpc_address,
     $rpc_port                   = $cassandra::params::rpc_port,
     $rpc_server_type            = $cassandra::params::rpc_server_type,
+    $rpc_min_threads            = $cassandra::params::rpc_min_threads,
+    $rpc_max_threads            = $cassandra::params::rpc_max_threads,
     $native_transport_port      = $cassandra::params::native_transport_port,
     $storage_port               = $cassandra::params::storage_port,
     $partitioner                = $cassandra::params::partitioner,
@@ -107,6 +109,14 @@ class cassandra(
         fail('storage_port must be a port number between 1 and 65535')
     }
 
+    if(!is_integer($rpc_min_threads)) {
+        fail('rpc_min_threads must be a nonnegative integer')
+    }
+
+    if(!is_integer($rpc_max_threads)) {
+        fail('rpc_max_threads must be a nonnegative integer')
+    }
+
     if(empty($seeds)) {
         fail('seeds must not be empty')
     }
@@ -139,7 +149,10 @@ class cassandra(
 
     include cassandra::install
 
-    $version_config = regsubst($cassandra::version, '\..*$', '')
+    $version_config = $cassandra::version ? {
+      /^2\./  =>  regsubst($cassandra::version, '^(2\.\d+).*$', '\1'),
+      default =>  regsubst($cassandra::version, '\..*$', ''),
+    }
 
     class { 'cassandra::config':
         version                    => $version_config,
@@ -156,6 +169,8 @@ class cassandra(
         rpc_address                => $rpc_address,
         rpc_port                   => $rpc_port,
         rpc_server_type            => $rpc_server_type,
+        rpc_min_threads            => $rpc_min_threads,
+        rpc_max_threads            => $rpc_max_threads,
         native_transport_port      => $native_transport_port,
         storage_port               => $storage_port,
         partitioner                => $partitioner,

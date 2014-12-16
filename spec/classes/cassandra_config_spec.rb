@@ -9,7 +9,7 @@ describe 'cassandra::config' do
     end
   let(:params) do
     {
-      :version                    => '1',
+      :version                    => '2.1',
       :config_path                => '/etc/cassandra',
       :max_heap_size              => '',
       :heap_newsize               => '',
@@ -63,16 +63,18 @@ describe 'cassandra::config' do
 
   it 'does contain file /etc/cassandra/cassandra-env.sh' do
     should contain_file('/etc/cassandra/cassandra-env.sh').with({
-      :ensure  => 'file',
-      :owner   => 'cassandra',
-      :group   => 'cassandra',
-      :mode    => '0644',
-      :content => /MAX_HEAP_SIZE/,
+      :content  => /CASSANDRA 2\.1/,
+      :ensure   => 'file',
+      :owner    => 'cassandra',
+      :group    => 'cassandra',
+      :mode     => '0644',
+      :content  => /MAX_HEAP_SIZE/,
     })
   end
 
   it 'does contain file /etc/cassandra/cassandra.yaml' do
     should contain_file('/etc/cassandra/cassandra.yaml').with({
+      :content => /CASSANDRA 2\.1/,
       :ensure  => 'file',
       :owner   => 'cassandra',
       :group   => 'cassandra',
@@ -143,6 +145,7 @@ describe 'cassandra::config' do
 
   it 'does contain file /etc/cassandra/conf/cassandra-env.sh' do
     should contain_file('/etc/cassandra/conf/cassandra-env.sh').with({
+      :content => /CASSANDRA 1/,
       :ensure  => 'file',
       :owner   => 'cassandra',
       :group   => 'cassandra',
@@ -153,6 +156,7 @@ describe 'cassandra::config' do
 
   it 'does contain file /etc/cassandra/conf/cassandra.yaml' do
     should contain_file('/etc/cassandra/conf/cassandra.yaml').with({
+      :content => /CASSANDRA 1/,
       :ensure  => 'file',
       :owner   => 'cassandra',
       :group   => 'cassandra',

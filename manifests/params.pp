@@ -138,6 +138,16 @@ class cassandra::params {
         default => $::cassandra_broadcast_address,
     }
 
+    $authenticator = $::cassandra_authenticator ? {
+        undef   => 'AllowAllAuthenticator',
+        default => $::cassandra_authenticator,
+    }
+
+    $authorizer = $::cassandra_authorizer ? {
+        undef   => 'AllowAllAuthorizer',
+        default => $::cassandra_authorizer,
+    }
+
     $rpc_address = $::cassandra_rpc_address ? {
         undef   => '0.0.0.0',
         default => $::cassandra_rpc_address,

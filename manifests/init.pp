@@ -150,8 +150,8 @@ class cassandra(
     include cassandra::install
 
     $version_config = $cassandra::version ? {
-      /^2\./  =>  regsubst($cassandra::version, '^(2\.\d+).*$', '\1'),
-      default =>  regsubst($cassandra::version, '\..*$', ''),
+      default   =>  regsubst($cassandra::version, '^(\d\.\d+).*$', '\1'),
+      /^1/      =>  regsubst($cassandra::version, '\..*$', ''),
     }
 
     class { 'cassandra::config':

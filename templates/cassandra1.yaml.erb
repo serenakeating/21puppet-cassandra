@@ -653,11 +653,14 @@ index_interval: 128
 # http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore
 #
 server_encryption_options:
-    internode_encryption: none
-    keystore: conf/.keystore
-    keystore_password: cassandra
-    truststore: conf/.truststore
-    truststore_password: cassandra
+    internode_encryption: <%= @server_encryption_internode %>
+    keystore: <%= @server_encryption_keystore %>
+    keystore_password: <%= @server_encryption_keystore_password %>
+    truststore: <%= @server_encryption_truststore %>
+    truststore_password: <%= @server_encryption_truststore_password %>
+<% unless @server_encryption_cipher_suites.nil? || @server_encryption_cipher_suites.empty? %>
+    cipher_suites: [<%= @server_encryption_cipher_suites.join(',') %>]
+<% end %>
     # More advanced defaults below:
     # protocol: TLS
     # algorithm: SunX509
@@ -667,13 +670,16 @@ server_encryption_options:
 
 # enable or disable client/server encryption.
 client_encryption_options:
-    enabled: false
-    keystore: conf/.keystore
-    keystore_password: cassandra
-    # require_client_auth: false
+    enabled: <%= @client_encryption_enabled %>
+    keystore: <%= @client_encryption_keystore %>
+    keystore_password: <%= @client_encryption_keystore_password %>
+    require_client_auth: <%= @client_encryption_require_auth %>
     # Set trustore and truststore_password if require_client_auth is true
-    # truststore: conf/.truststore
-    # truststore_password: cassandra
+    truststore: <%= @client_encryption_truststore %>
+    truststore_password: <%= @client_encryption_truststore_password %>
+<% unless @client_encryption_cipher_suites.nil? || @client_encryption_cipher_suites.empty? %>
+    cipher_suites: [<%= @client_encryption_cipher_suites.join(',') %>]
+<% end %>
     # More advanced defaults below:
     # protocol: TLS
     # algorithm: SunX509
